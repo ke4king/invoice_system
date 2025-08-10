@@ -1,0 +1,112 @@
+backend/venv/
+**/__pycache__/**
+*.pyc
+*.pyo
+*.pyd
+dist/
+node_modules/
+.DS_Store
+.env
+frontend/dist/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+backend/venv/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Application specific directories
+# Restrict to repository root to avoid ignoring similarly named subdirs under frontend/src
+/logs/
+/pids/
+/storage/
+# Track documentation by default; if you have generated docs, ignore only their build output instead.
+# Example (uncomment if applicable):
+# /docs/_build/
+backend/storage/
+
+# Log files
+*.log
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Temporary files
+tmp/
+temp/
+verify_database.sh
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Claude files
+.claude/
+
+# Docker Compose (development)
+/docker-compose.dev.yml
+
+# Docker Compose (local overrides)
+# Ignore developer-specific override file by default
+/docker-compose.override.yml
+
+# Local development helper scripts
+/start-dev.sh
+
+# Always keep the repository .gitignore tracked (do not ignore it)
+!.gitignore

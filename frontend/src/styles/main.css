@@ -1,0 +1,309 @@
+/* 发票管理系统 - 统一样式文件 */
+
+/* ========== 基础重置和全局样式 ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  color: var(--el-text-color-primary);
+  background-color: var(--el-bg-color-page);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ========== 主题系统 ========== */
+
+/* 自定义主题变量 */
+:root {
+  /* 字体层级 */
+  --font-size-base: 14px;
+  --font-size-sm: 12px;
+  --font-size-lg: 16px;
+  --font-size-xl: 24px;
+  /* 过渡动画 */
+  --theme-transition: all 0.3s ease;
+  /* 表格密度与色阶 */
+  --table-padding-y: 12px;
+  --table-padding-x: 12px;
+  --table-header-bg: var(--el-fill-color-lighter);
+  --table-row-hover-bg: var(--el-fill-color-light);
+}
+
+/* ========== Element Plus 组件增强（保留必要定制，移除与默认重复覆盖） ========== */
+/* 删除卡片、按钮、表格的通用覆盖，遵循 Element Plus 默认样式 */
+
+/* 筛选区最小宽度保留 */
+.filter-form .el-select { min-width: 100px !important; }
+.filter-form .el-select .el-input__wrapper { min-width: 100px !important; }
+
+.el-input__wrapper,
+.el-select .el-input__wrapper {
+  border-radius: 6px;
+}
+
+/* ========== 页面布局 ========== */
+.page-container {
+  padding: 20px;
+  min-height: calc(100vh - 60px);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--el-border-color-lighter);
+}
+
+.page-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--el-text-color-regular);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.page-header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* ========== 卡片和表单 ========== */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.card-header-title {
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+  color: var(--el-text-color-regular);
+  margin: 0;
+}
+
+/* 统一分组/段落标题（可在需要的地方复用） */
+.section-title {
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--el-text-color-regular);
+  margin-bottom: 12px;
+}
+
+.filter-section {
+  padding: 16px;
+  border-radius: 6px;
+  margin-bottom: 24px;
+}
+
+
+/* 表格容器样式 */
+.table-container {
+  margin-top: 24px;
+}
+
+.table-container .el-card {
+  margin-top: 0;
+}
+
+.table-container .el-card__body {
+  padding: 16px 20px 20px 20px;
+  background: var(--el-bg-color);
+}
+
+/* 分页容器样式 */
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 16px;
+  background: transparent;
+}
+
+/* ========== 统计卡片 ========== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color-lighter);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  border-color: var(--el-color-primary-light-5);
+  box-shadow: 0 2px 8px var(--el-color-primary-light-8);
+}
+
+.stat-number {
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--el-color-primary);
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--el-text-color-regular);
+}
+
+/* ========== 按钮系统 ========== */
+.table-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.table-actions .el-button {
+  padding: 4px 8px;
+  font-size: 12px;
+  height: auto;
+  min-height: 24px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.action-buttons.center {
+  justify-content: center;
+}
+
+/* ========== 状态和工具类 ========== */
+.status-success { color: var(--el-color-success); }
+.status-warning { color: var(--el-color-warning); }
+.status-danger { color: var(--el-color-danger); }
+.status-info { color: var(--el-color-info); }
+
+.text-center { text-align: center; }
+.text-muted { color: var(--el-text-color-placeholder); }
+.text-small { font-size: 12px; }
+
+/* 间距工具类 */
+.mb-8 { margin-bottom: 8px; }
+.mb-16 { margin-bottom: 16px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-24 { margin-bottom: 24px; }
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-20 { margin-top: 20px; }
+.mt-24 { margin-top: 24px; }
+
+/* 卡片间距 */
+.el-card + .el-card {
+  margin-top: 24px;
+}
+
+/* 使用组件默认内边距，移除统一覆盖 */
+
+/* 表单间距 */
+
+
+/* 响应式间距调整 */
+
+/* ========== 特殊组件 ========== */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--el-text-color-placeholder);
+}
+
+/* ========== 宽度工具类（移除行内样式） ========== */
+.w-full { width: 100% !important; }
+.w-120 { width: 120px !important; }
+.w-180 { width: 180px !important; }
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+/* 旧版上传容器样式移除，统一使用 el-upload 默认样式 */
+
+/* 统一：上传拖拽框在桌面端的高度 */
+@media (min-width: 992px) {
+  .el-upload--drag .el-upload-dragger {
+    height: 320px;
+  }
+}
+
+/* 主题切换按钮样式在组件内 scoped 定义，移除全局重复定义 */
+
+/* ========== 滚动条样式 ========== */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--el-fill-color-lighter);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--el-fill-color-dark);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--el-fill-color-darker);
+}
+
+/* ========== 响应式设计（合并断点） ========== */
+@media (max-width: 768px) {
+  /* 先前分散在多个块中的 768px 断点统一合并 */
+  .table-container .el-card__body {
+    padding: 16px;
+  }
+  .pagination-container {
+    margin-top: 16px;
+    padding-top: 12px;
+  }
+  .page-container {
+    padding: 16px;
+  }
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .page-header-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  .action-buttons {
+    flex-wrap: wrap;
+  }
+}
+
+/* ========== 动画效果 ========== */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}

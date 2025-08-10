@@ -1,0 +1,138 @@
+version: '3.8'
+
+services:
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: invoice_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-invoice_root_2024}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-invoice_system}
+      MYSQL_USER: ${MYSQL_USER:-invoice_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-invoice_pass_2024}
+      TZ: Asia/Shanghai
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - invoice_network
+
+  # Redis消息队列
+  redis:
+    image: redis:7-alpine
+    container_name: invoice_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - redis_data:/data
+    networks:
+      - invoice_network
+
+  # FastAPI后端应用
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: invoice_backend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./storage:/app/storage
+      - ./backend/app:/app/app
+    environment:
+      - DATABASE_URL=mysql+pymysql://${MYSQL_USER:-invoice_user}:${MYSQL_PASSWORD:-invoice_pass_2024}@mysql:3306/${MYSQL_DATABASE:-invoice_system}
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-in-production}
+      - BAIDU_OCR_API_KEY=${BAIDU_OCR_API_KEY}
+      - BAIDU_OCR_SECRET_KEY=${BAIDU_OCR_SECRET_KEY}
+      - UPLOAD_DIR=/app/storage
+      - TZ=Asia/Shanghai
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - invoice_network
+
+  # Celery异步任务处理器
+  celery_worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: invoice_celery_worker
+    restart: unless-stopped
+    command: celery -A app.workers.celery_app worker --loglevel=info
+    volumes:
+      - ./storage:/app/storage
+      - ./backend/app:/app/app
+    environment:
+      - DATABASE_URL=mysql+pymysql://${MYSQL_USER:-invoice_user}:${MYSQL_PASSWORD:-invoice_pass_2024}@mysql:3306/${MYSQL_DATABASE:-invoice_system}
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-in-production}
+      - BAIDU_OCR_API_KEY=${BAIDU_OCR_API_KEY}
+      - BAIDU_OCR_SECRET_KEY=${BAIDU_OCR_SECRET_KEY}
+      - TZ=Asia/Shanghai
+      - UPLOAD_DIR=/app/storage
+    depends_on:
+      - mysql
+      - redis
+      - backend
+    networks:
+      - invoice_network
+
+  # Celery定时任务调度器
+  celery_beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: invoice_celery_beat
+    restart: unless-stopped
+    command: celery -A app.workers.celery_app beat --loglevel=info
+    volumes:
+      - ./storage:/app/storage
+      - ./backend/app:/app/app
+    environment:
+      - DATABASE_URL=mysql+pymysql://${MYSQL_USER:-invoice_user}:${MYSQL_PASSWORD:-invoice_pass_2024}@mysql:3306/${MYSQL_DATABASE:-invoice_system}
+      - REDIS_URL=redis://redis:6379/0
+      - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-in-production}
+      - BAIDU_OCR_API_KEY=${BAIDU_OCR_API_KEY}
+      - BAIDU_OCR_SECRET_KEY=${BAIDU_OCR_SECRET_KEY}
+      - UPLOAD_DIR=/app/storage
+      - TZ=Asia/Shanghai
+    depends_on:
+      - mysql
+      - redis
+      - backend
+    networks:
+      - invoice_network
+
+  # Vue3前端应用
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: invoice_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - TZ=Asia/Shanghai
+    depends_on:
+      - backend
+    networks:
+      - invoice_network
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  invoice_network:
+    driver: bridge

@@ -1,0 +1,82 @@
+/* 发票管理系统 - 主题样式文件 */
+
+/* 深色模式变量由 main.css 统一引入，避免重复引入 */
+
+/* ========== 主题变量定义 ========== */
+:root {
+  /* 系统主色调 - 蓝色系 */
+  --theme-primary: #409EFF;
+  --theme-primary-light: #79bbff;
+  --theme-primary-lighter: #a0cfff;
+  --theme-primary-dark: #337ecc;
+}
+
+/* 取消全局过渡，按需在具体组件/容器上定义过渡 */
+
+/* 主题应用由 main.css 的 body 统一定义 */
+
+/* ========== 自定义主题增强 ========== */
+.theme-card {
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color-lighter);
+  border-radius: 8px;
+  box-shadow: var(--el-box-shadow-light);
+}
+
+.theme-card:hover {
+  border-color: var(--el-color-primary-light-5);
+  box-shadow: 0 4px 12px var(--el-color-primary-light-8);
+}
+
+.theme-text-primary {
+  color: var(--el-text-color-primary);
+}
+
+.theme-text-secondary {
+  color: var(--el-color-primary);
+}
+
+.theme-bg-primary {
+  background-color: var(--el-bg-color);
+}
+
+.theme-bg-page {
+  background-color: var(--el-bg-color-page);
+}
+
+.theme-border {
+  border-color: var(--el-border-color);
+}
+
+/* ========== 主题切换按钮样式 ========== */
+.theme-switch {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--el-bg-color);
+  border: 1px solid var(--el-border-color);
+  box-shadow: var(--el-box-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-switch:hover {
+  border-color: var(--el-color-primary);
+  box-shadow: 0 4px 12px var(--el-color-primary-light-8);
+}
+
+.theme-switch-icon {
+  font-size: 18px;
+  color: var(--el-text-color-primary);
+}
+
+.el-dropdown-link:focus-visible { outline: none; box-shadow: none; }
+
+

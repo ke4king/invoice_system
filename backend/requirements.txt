@@ -1,0 +1,48 @@
+# FastAPI核心依赖
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# 数据库相关
+sqlalchemy==2.0.23
+alembic==1.13.1
+pymysql==1.1.0
+cryptography==42.0.0
+
+# Redis和Celery
+redis==5.0.1
+celery==5.3.4
+pycryptodome==3.20.0
+
+# HTTP客户端
+httpx==0.25.2
+requests==2.31.0
+
+# 文件处理
+python-multipart==0.0.6
+PyMuPDF==1.23.14
+Pillow==10.1.0
+pdf2image==1.16.3
+
+# 密码加密
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+python-jose[cryptography]==3.3.0
+
+# 邮箱处理
+imapclient==2.3.1
+email-validator==2.2.0
+
+# 工具库
+python-dotenv==1.0.0
+loguru==0.7.2
+psutil==5.9.6
+
+# 数据导出
+pandas==2.1.4
+openpyxl==3.1.2
+
+# 开发和测试
+pytest==7.4.3
+pytest-asyncio==0.21.1
