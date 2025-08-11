@@ -56,8 +56,15 @@ export const usePrintStore = defineStore('print', {
     async fetchLayouts(): Promise<void> {
       try {
         const response = await getPrintLayouts()
-        this.layouts = response.data.layouts
-        this.invoiceTypes = response.data.invoice_types
+        const data: any = response.data || {}
+        this.layouts = data.layouts || []
+        // 兼容后端未返回 invoice_types 的情况：从 layouts 推导唯一的发票类型列表
+        const inferredTypes: InvoiceType[] = Array.from(
+          new Set(
+            (this.layouts || []).flatMap((layout: PrintLayout) => layout.supported_types || [])
+          )
+        ).map((t: string) => ({ value: t, label: t, description: '' }))
+        this.invoiceTypes = (data.invoice_types || inferredTypes) as InvoiceType[]
       } catch (error) {
         console.error('获取打印布局失败:', error)
       }

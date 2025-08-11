@@ -243,6 +243,10 @@ const realtimeEnabled = ref(false)
 const realtimePaused = ref(false)
 const performancePeriod = ref(24)
 
+type LevelCount = { level: string; count: number }
+type TypeCount = { type: string; count: number }
+type DateCount = { date: string; count: number }
+
 const statistics = reactive({
   total_logs: 0,
   error_logs: 0,
@@ -250,9 +254,9 @@ const statistics = reactive({
   error_rate: 0,
   daily_change: 0,
   success_trend: 0,
-  by_type: [],
-  by_level: [],
-  by_date: []
+  by_type: [] as TypeCount[],
+  by_level: [] as LevelCount[],
+  by_date: [] as DateCount[]
 })
 
 const healthStatus = reactive({
@@ -275,9 +279,10 @@ const advancedFilters = reactive({
   response_time_range: [0, 1000]
 })
 
-const realtimeLogs = ref([])
-let realtimeInterval = null
-let performanceChart = null
+type RealtimeLog = { id: number; created_at: string; log_level: string; log_type: string; message: string }
+const realtimeLogs = ref<RealtimeLog[]>([])
+let realtimeInterval: ReturnType<typeof setInterval> | null = null
+let performanceChart: echarts.ECharts | null = null
 
 // 图表引用
 const errorTimelineRef = ref()
@@ -343,8 +348,9 @@ const getHealthStatus = async () => {
   }
 }
 
-const toggleRealtime = (enabled: boolean) => {
-  if (enabled) {
+const toggleRealtime = (enabled: boolean | string | number) => {
+  const isEnabled = Boolean(enabled)
+  if (isEnabled) {
     startRealtimeMonitoring()
   } else {
     stopRealtimeMonitoring()
@@ -355,7 +361,7 @@ const startRealtimeMonitoring = () => {
   realtimeInterval = setInterval(async () => {
     if (!realtimePaused.value) {
       // 模拟实时日志数据
-      const newLog = {
+      const newLog: RealtimeLog = {
         id: Date.now(),
         created_at: new Date().toISOString(),
         log_level: ['INFO', 'WARNING', 'ERROR'][Math.floor(Math.random() * 3)],
@@ -418,12 +424,12 @@ const getAvgResponseTime = () => Math.floor(Math.random() * 500) + 100
 const getResponseTrend = () => Math.random() > 0.5 ? '↗️ 改善' : '↘️ 下降'
 const getSystemHealth = () => healthStatus.status === 'healthy' ? '良好' : '异常'
 const getHealthText = () => {
-  const texts = { healthy: '健康', degraded: '降级', unhealthy: '异常' }
-  return texts[healthStatus.status] || '未知'
+  const texts: Record<'healthy' | 'degraded' | 'unhealthy', string> = { healthy: '健康', degraded: '降级', unhealthy: '异常' }
+  return texts[healthStatus.status as 'healthy' | 'degraded' | 'unhealthy'] || '未知'
 }
 
 const getLogTypeLabel = (type: string) => {
-  const labels = {
+  const labels: Record<string, string> = {
     auth: '认证', invoice: '发票', email: '邮箱', 
     ocr: 'OCR', print: '打印', system: '系统'
   }
@@ -488,18 +494,17 @@ const exportLogs = async () => {
       switch (formatValue) {
         case 'csv':
           // 使用URL方式下载CSV
-          const csvUrl = exportLogsCSV(exportParams)
+          const csvUrl = await exportLogsCSV(exportParams)
           filename = `enhanced_monitoring_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`
-          // 直接打开下载链接
-          window.open(csvUrl, '_blank')
+          const csvBlobUrl = window.URL.createObjectURL(csvUrl)
+          window.open(csvBlobUrl, '_blank')
           ElMessage.success(`监控日志导出成功！文件名：${filename}`)
           return
         case 'excel':
-          // 使用URL方式下载Excel
-          const excelUrl = exportLogsExcel(exportParams)
+          const excelUrl = await exportLogsExcel(exportParams)
           filename = `enhanced_monitoring_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.xlsx`
-          // 直接打开下载链接
-          window.open(excelUrl, '_blank')
+          const excelBlobUrl = window.URL.createObjectURL(excelUrl)
+          window.open(excelBlobUrl, '_blank')
           ElMessage.success(`监控日志导出成功！文件名：${filename}`)
           return
         case 'json':

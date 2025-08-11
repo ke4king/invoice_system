@@ -209,13 +209,18 @@ const healthStatus = reactive({
   check_time: new Date().toISOString()
 })
 
+type ActivityByDate = { date: string; count: number }
+type ActivityByType = { type: string; count: number }
+type InvoiceStatusCount = { status: string; count: number }
+type ErrorByType = { type: string; count: number }
+
 const dashboardStats = reactive({
   period_days: 30,
-  invoice_stats: null,
-  ocr_stats: null,
-  email_stats: null,
-  activity_stats: null,
-  error_stats: null,
+  invoice_stats: null as null | { recent_invoices?: number; total_invoices?: number; amount_stats?: { total: number }; by_status?: InvoiceStatusCount[] },
+  ocr_stats: null as null | { success_rate?: number; total_processed?: number; successful_ocr?: number },
+  email_stats: null as null | { active_accounts?: number; scan_activities?: number; processed_emails?: number },
+  activity_stats: null as null | { daily_activity?: ActivityByDate[]; by_type?: ActivityByType[]; recent_activities?: any[] },
+  error_stats: null as null | { total_errors?: number; by_type?: ErrorByType[]; by_level?: { level: string; count: number }[] },
   last_updated: ''
 })
 
@@ -224,7 +229,7 @@ const loadingRecent = ref(false)
 
 // 计算属性
 const errorCount = computed(() => {
-  const total = (dashboardStats as any)?.error_stats?.total_errors
+  const total = dashboardStats.error_stats?.total_errors
   return typeof total === 'number' ? total : 0
 })
 
@@ -274,9 +279,9 @@ const getHealthStatus = async () => {
 const getDashboardStats = async () => {
   try {
     const response = await getDashboardStatistics(selectedPeriod.value)
-    const stats = response.data || ({} as any)
+    const stats = response.data || {}
 
-    Object.assign(dashboardStats, stats)
+    Object.assign(dashboardStats, stats as any)
 
     await nextTick()
     updateChartsData()
@@ -319,7 +324,7 @@ const updateChartsData = () => {
   // 更新类型分布图数据
   if (typeChart && dashboardStats.activity_stats?.by_type) {
     const byType = dashboardStats.activity_stats.by_type
-    const data = byType.map(item => ({
+    const data = byType.map((item: ActivityByType) => ({
       name: getLogTypeLabel(item.type),
       value: item.count
     }))
@@ -334,7 +339,7 @@ const updateChartsData = () => {
   // 更新发票状态分布图数据
   if (statusChart && dashboardStats.invoice_stats?.by_status) {
     const byStatus = dashboardStats.invoice_stats.by_status
-    const data = byStatus.map(item => ({
+    const data = byStatus.map((item: InvoiceStatusCount) => ({
       name: getStatusLabel(item.status),
       value: item.count
     }))
@@ -349,8 +354,8 @@ const updateChartsData = () => {
   // 更新错误类型统计图数据
   if (errorChart && dashboardStats.error_stats?.by_type) {
     const byType = dashboardStats.error_stats.by_type
-    const categories = byType.map((item: any) => getLogTypeLabel(item.type))
-    const values = byType.map((item: any) => item.count)
+    const categories = byType.map((item: ErrorByType) => getLogTypeLabel(item.type))
+    const values = byType.map((item: ErrorByType) => item.count)
 
     errorChart.setOption({
       xAxis: {
@@ -424,9 +429,9 @@ const initActivityChart = () => {
   
   activityChart = echarts.init(activityChartRef.value)
   
-  const dailyActivity = dashboardStats.activity_stats?.daily_activity || []
-  const dates = dailyActivity.map(item => item.date)
-  const counts = dailyActivity.map(item => item.count)
+  const dailyActivity: ActivityByDate[] = dashboardStats.activity_stats?.daily_activity || []
+  const dates = dailyActivity.map((item: ActivityByDate) => item.date)
+  const counts = dailyActivity.map((item: ActivityByDate) => item.count)
   
   const option = {
     title: {
@@ -473,8 +478,8 @@ const initTypeChart = () => {
   
   typeChart = echarts.init(typeChartRef.value)
   
-  const byType = dashboardStats.activity_stats?.by_type || []
-  const data = byType.map(item => ({
+  const byType: ActivityByType[] = dashboardStats.activity_stats?.by_type || []
+  const data = byType.map((item: ActivityByType) => ({
     name: getLogTypeLabel(item.type),
     value: item.count
   }))
@@ -509,8 +514,8 @@ const initStatusChart = () => {
   
   statusChart = echarts.init(statusChartRef.value)
   
-  const byStatus = dashboardStats.invoice_stats?.by_status || []
-  const data = byStatus.map(item => ({
+  const byStatus: InvoiceStatusCount[] = dashboardStats.invoice_stats?.by_status || []
+  const data = byStatus.map((item: InvoiceStatusCount) => ({
     name: getStatusLabel(item.status),
     value: item.count
   }))
@@ -545,9 +550,9 @@ const initErrorChart = () => {
   
   errorChart = echarts.init(errorChartRef.value)
   
-  const byTypeErr = dashboardStats.error_stats?.by_type || []
-  const categories = byTypeErr.map((item: any) => getLogTypeLabel(item.type))
-  const values = byTypeErr.map((item: any) => item.count)
+  const byTypeErr: ErrorByType[] = dashboardStats.error_stats?.by_type || []
+  const categories = byTypeErr.map((item: ErrorByType) => getLogTypeLabel(item.type))
+  const values = byTypeErr.map((item: ErrorByType) => item.count)
   
   const option = {
     tooltip: {

@@ -68,8 +68,11 @@ const invoiceStore = useInvoiceStore()
 const loading = ref(false)
 const invoice = ref<Invoice | null>(null)
 
-const getStatusType = (status: string) => {
-  const statusMap: Record<string, string> = {
+import type { TagProps } from 'element-plus'
+type TagType = NonNullable<TagProps['type']>
+
+const getStatusType = (status: string): TagType => {
+  const statusMap: Record<string, TagType> = {
     'processing': 'warning',
     'completed': 'success',
     'failed': 'danger'
@@ -86,8 +89,8 @@ const getStatusText = (status: string) => {
   return statusMap[status] || '未知'
 }
 
-const getOCRStatusType = (status: string) => {
-  const statusMap: Record<string, string> = {
+const getOCRStatusType = (status: string): TagType => {
+  const statusMap: Record<string, TagType> = {
     'pending': 'info',
     'processing': 'warning',
     'success': 'success',

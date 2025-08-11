@@ -346,8 +346,8 @@ const fetchLogs = async () => {
     const response = await getLogs(params)
     
     if (response && response.data) {
-      logs.value = response.data
-      pagination.total = response.total || 0
+      logs.value = response.data as LogItem[]
+      pagination.total = (response as any).total || 0
     } else {
       logs.value = []
       pagination.total = 0
