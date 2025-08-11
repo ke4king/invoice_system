@@ -35,7 +35,22 @@ cp .env.example .env
 
 ### 2）使用 Docker Compose 启动（推荐）
 
+可以选择本地构建镜像，或直接使用 GitHub 容器镜像（GHCR）上的预构建镜像。
+
+使用预构建镜像（推荐在 CI/CD 与服务器环境）：
+
 ```bash
+export FRONTEND_IMAGE=ghcr.io/ke4king/invoice_system-frontend:latest
+export BACKEND_IMAGE=ghcr.io/ke4king/invoice_system-backend:latest
+
+docker compose pull
+docker compose up -d
+```
+
+如果希望本地构建镜像运行：
+
+```bash
+unset FRONTEND_IMAGE BACKEND_IMAGE
 docker compose up -d --build
 ```
 

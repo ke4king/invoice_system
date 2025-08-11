@@ -35,7 +35,22 @@ Update secrets like `SECRET_KEY`, database credentials, and any OCR keys.
 
 ### 2) Run with Docker Compose (recommended)
 
+You can run with local builds, or use prebuilt images on GitHub Container Registry (GHCR).
+
+Using prebuilt images (recommended for CI/CD and servers):
+
 ```bash
+export FRONTEND_IMAGE=ghcr.io/ke4king/invoice_system-frontend:latest
+export BACKEND_IMAGE=ghcr.io/ke4king/invoice_system-backend:latest
+
+docker compose pull
+docker compose up -d
+```
+
+Build locally instead of using prebuilt images:
+
+```bash
+unset FRONTEND_IMAGE BACKEND_IMAGE
 docker compose up -d --build
 ```
 
