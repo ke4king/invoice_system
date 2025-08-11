@@ -212,8 +212,11 @@ const configRules: FormRules = {
   ]
 }
 
-const getScanStatusType = (status: string) => {
-  const statusMap: Record<string, string> = {
+import type { TagProps } from 'element-plus'
+type TagType = NonNullable<TagProps['type']>
+
+const getScanStatusType = (status: string): TagType => {
+  const statusMap: Record<string, TagType> = {
     'idle': 'info',
     'scanning': 'warning',
     'completed': 'success',

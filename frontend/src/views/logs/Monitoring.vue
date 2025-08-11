@@ -582,7 +582,7 @@ const initErrorChart = () => {
 
 // 工具方法
 const getHealthStatusText = (status: string) => {
-  const statusMap = {
+  const statusMap: Record<string, string> = {
     healthy: '健康',
     degraded: '降级',
     unhealthy: '异常'

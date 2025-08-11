@@ -175,7 +175,7 @@
           <el-descriptions-item label="资源类型">{{ selectedLog.resource_type || '-' }}</el-descriptions-item>
           <el-descriptions-item label="资源ID">{{ selectedLog.resource_id || '-' }}</el-descriptions-item>
           <el-descriptions-item label="IP地址">{{ selectedLog.ip_address || '-' }}</el-descriptions-item>
-          <el-descriptions-item label="用户代理" span="2">
+          <el-descriptions-item label="用户代理" :span="2">
             <div class="user-agent">{{ selectedLog.user_agent || '-' }}</div>
           </el-descriptions-item>
         </el-descriptions>
