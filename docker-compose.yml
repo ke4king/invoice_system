@@ -53,6 +53,9 @@ services:
       - BAIDU_OCR_SECRET_KEY=${BAIDU_OCR_SECRET_KEY}
       - UPLOAD_DIR=/app/storage
       - TZ=Asia/Shanghai
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@yourdomain.com}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
     depends_on:
       - mysql
       - redis
